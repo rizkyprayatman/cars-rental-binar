@@ -100,8 +100,6 @@ const Admin = () => {
   };
 
   if (role === null || role === "member") {
-    console.log("pergi");
-    // navigate("/login");
     return (
       <>
         <div className="container py-5 my-5 bg-primaryDarkBlue">

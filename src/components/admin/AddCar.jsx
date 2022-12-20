@@ -4,7 +4,7 @@ import { faHouse, faCarSide } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import axios from "axios";
 
-const URL = "https://back-end-car-rental-production.up.railway.app";
+const URL = "http://localhost:3001";
 
 const AddCar = () => {
   return (
@@ -25,9 +25,15 @@ const PostCar = () => {
   };
 
   async function doAddCar(form) {
-    const user = await axios.post(`${URL}/api/cars`, form).catch((error) => {
-      console.log(error.response);
+    const user = await axios({
+      method: "post",
+      url: `${URL}/api/cars`,
+      data: form,
+      headers: { "Content-Type": "multipart/form-data" },
     });
+    // const user = await axios.post(`${URL}/api/cars`, form).catch((error) => {
+    //   console.log(error.response);
+    // });
     console.log(user);
   }
 
@@ -95,7 +101,7 @@ const PostCar = () => {
 
     if (type === "time") {
       const time = event.target.value;
-      const dateAvailable = availabeAt.date + "T" + time + ":00Z";
+      const dateAvailable = availabeAt.date + "T" + time + ":00.274Z";
       setForm((prevState) => ({
         ...prevState,
         availableAt: dateAvailable,
@@ -294,8 +300,6 @@ const Admin = () => {
   };
 
   if (role === null || role === "member") {
-    console.log("pergi");
-    // navigate("/login");
     return (
       <>
         <div className="container py-5 my-5 bg-primaryDarkBlue">

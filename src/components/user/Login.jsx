@@ -38,14 +38,13 @@ const Login = () => {
       .catch((error) => {
         if (error.response.data.error === "Password Salah. Please try again!") {
           warning("Password Salah");
+          navigate("/login");
         }
         if (error.response.data.error === "User not found. Please register!") {
           warning("Email tidak terdaftar");
           navigate("/login");
         }
       });
-
-    console.log(user);
 
     if (user != null) {
       localStorage.setItem("AUTH_TOKEN", user.data.data.token);
