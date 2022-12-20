@@ -96,7 +96,7 @@ const Admin = () => {
   const name = localStorage.getItem("Name");
   const logOut = () => {
     localStorage.clear();
-    window.location.replace("http://localhost:3000/");
+    window.location.replace("https://cars-rental-binar-production.up.railway.app");
   };
 
   if (role === null || role === "member") {
