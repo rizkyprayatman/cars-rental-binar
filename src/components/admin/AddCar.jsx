@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faCarSide } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
+import { AlertProvider, AlertOutlet } from "react-bootstrap-hooks-alert";
+import "react-bootstrap-hooks-alert/dist/Alert.css";
+import { useAlert } from "react-bootstrap-hooks-alert";
 
-const URL = "http://localhost:3001";
+const URL = "https://back-end-car-rental-production.up.railway.app";
 
 const AddCar = () => {
   return (
@@ -16,7 +19,12 @@ const AddCar = () => {
 
 const PostCar = () => {
   const [form, setForm] = useState({});
+  const [isLoading, setLoading] = useState({});
+
+  console.log(isLoading.isLoading);
   const [availabeAt, setDate] = useState({});
+  const { warning, success } = useAlert();
+  useEffect(() => {});
 
   const handleSubmitForm = (event) => {
     doAddCar(form);
@@ -25,16 +33,23 @@ const PostCar = () => {
   };
 
   async function doAddCar(form) {
+    setLoading({ isLoading: true });
     const user = await axios({
       method: "post",
       url: `${URL}/api/cars`,
       data: form,
       headers: { "Content-Type": "multipart/form-data" },
     });
-    // const user = await axios.post(`${URL}/api/cars`, form).catch((error) => {
-    //   console.log(error.response);
-    // });
+    if (user.data.message === "Add Car") {
+      setLoading({ isLoading: false });
+      success("Berhasil Add Car");
+    }
+    if (user.data.message === "Data not complete") {
+      setLoading({ isLoading: false });
+      warning("Data not complete");
+    }
     console.log(user);
+    console.log(user.data.message);
   }
 
   const handleSetForm = (type, event) => {
@@ -111,7 +126,7 @@ const PostCar = () => {
     if (type === "image") {
       setForm((prevState) => ({
         ...prevState,
-        image: event.target.value,
+        image: event.target.files[0],
       }));
     }
   };
@@ -280,9 +295,13 @@ const PostCar = () => {
                   onChange={(event) => handleSetForm("image", event)}
                 />
               </div>
-              <button type="submit" className="btn btn-primary mt-2 w-100">
-                Add Car
-              </button>
+              {isLoading.isLoading === true ? (
+                <p className="btn btn-loading mt-2 w-100">...Loading</p>
+              ) : (
+                <button type="submit" className="btn btn-primary mt-2 w-100">
+                  Add Car
+                </button>
+              )}
             </form>
           </div>
         </div>
@@ -296,7 +315,9 @@ const Admin = () => {
   const name = localStorage.getItem("Name");
   const logOut = () => {
     localStorage.clear();
-    window.location.replace("https://cars-rental-binar-production.up.railway.app");
+    window.location.replace(
+      "https://cars-rental-binar-production.up.railway.app"
+    );
   };
 
   if (role === null || role === "member") {
@@ -390,7 +411,10 @@ const Admin = () => {
               </div>
             </div>
           </div>
-          <PostCar />
+          <AlertProvider timeouts={{ warning: 2000, success: 2000 }}>
+            <AlertOutlet className="position-absolute bottom-0 start-50 " />
+            <PostCar />
+          </AlertProvider>
         </main>
       </>
     );

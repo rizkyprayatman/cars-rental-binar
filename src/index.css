@@ -20,6 +20,12 @@ body {
   background: #f1f3ff !important;
 }
 
+.btn-loading {
+  border-color: blue;
+  border: 0.3rem solid;
+  color: black;
+}
+
 .bg-primaryDarkBlue {
   background: #0d28a6;
 }
