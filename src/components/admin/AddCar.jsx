@@ -21,14 +21,12 @@ const PostCar = () => {
   const [form, setForm] = useState({});
   const [isLoading, setLoading] = useState({});
 
-  console.log(isLoading.isLoading);
   const [availabeAt, setDate] = useState({});
   const { warning, success } = useAlert();
   useEffect(() => {});
 
   const handleSubmitForm = (event) => {
     doAddCar(form);
-    console.log(form);
     event.preventDefault();
   };
 
@@ -48,8 +46,6 @@ const PostCar = () => {
       setLoading({ isLoading: false });
       warning("Data not complete");
     }
-    console.log(user);
-    console.log(user.data.message);
   }
 
   const handleSetForm = (type, event) => {
